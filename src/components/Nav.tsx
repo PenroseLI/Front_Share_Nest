@@ -3,9 +3,9 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const links = [
-  { href: "/users", label: "Clientes" },
-  { href: "/products", label: "Tienda" },
-  { href: "/orders", label: "Pedidos" },
+  { href: "/users", label: "Usuarios" },
+  { href: "/listings", label: "Habitaciones" },
+  { href: "/bookings", label: "Solicitudes" },
 ];
 
 export default function Nav() {
