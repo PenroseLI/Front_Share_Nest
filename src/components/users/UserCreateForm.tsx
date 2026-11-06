@@ -5,7 +5,7 @@ export type UserFormValues = {
   id: string;
   name: string;
   email: string;
-  age: number;
+  age: string;
   phone: string;
   role: UserRole;
   bio: string;
@@ -15,7 +15,7 @@ export type UserFormValues = {
 };
 
 export const emptyUserForm: UserFormValues = {
-  id: "", name: "", email: "", age: 0, phone: "",
+  id: "", name: "", email: "", age: "", phone: "",
   role: "SEEKER", bio: "", budgetMax: "", smoker: false, pets: false,
 };
 
@@ -30,7 +30,7 @@ export function UserCreateForm({ value, onChange, onSubmit }: {
       <FormInput className="focus:ring-2 focus:ring-blue-500" placeholder="Cédula 5-20 dígitos" value={value.id} onChange={event => onChange({ ...value, id: event.target.value })} required />
       <FormInput className="focus:ring-2 focus:ring-blue-500" placeholder="Nombre" value={value.name} onChange={event => onChange({ ...value, name: event.target.value })} required />
       <FormInput className="focus:ring-2 focus:ring-blue-500" placeholder="Email" value={value.email} onChange={event => onChange({ ...value, email: event.target.value })} required />
-      <FormInput className="focus:ring-2 focus:ring-blue-500" type="number" placeholder="Edad" value={value.age} onChange={event => onChange({ ...value, age: Number(event.target.value) })} required />
+      <FormInput className="focus:ring-2 focus:ring-blue-500" type="number" min={0} max={130} placeholder="Edad" value={value.age} onChange={event => onChange({ ...value, age: event.target.value })} required />
       <FormInput className="focus:ring-2 focus:ring-blue-500" placeholder="Tel +573..." value={value.phone} onChange={event => onChange({ ...value, phone: event.target.value })} required />
 
       <FormSelect value={value.role} onChange={event => onChange({ ...value, role: event.target.value as UserRole })}>
