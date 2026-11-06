@@ -10,7 +10,7 @@ export function UserCard({ user, onDeactivate }: { user: User; onDeactivate: (us
         <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 text-white flex items-center justify-center font-bold text-lg">
           {user.name.charAt(0).toUpperCase()}
         </div>
-        <span className="text-[11px] font-bold tracking-widest uppercase px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">Activo</span>
+        <span className="text-[11px] font-bold tracking-widest uppercase px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">{user.role}</span>
       </div>
       <div className="mt-3">
         <div className="font-semibold leading-tight">{user.name}</div>

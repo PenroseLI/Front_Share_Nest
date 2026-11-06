@@ -24,6 +24,11 @@ export default function UserDetailPage({ params }: { params: Promise<{ id: strin
           <div><dt className="text-sm text-slate-500">Correo</dt><dd className="mt-1 font-medium break-all">{user.email}</dd></div>
           <div><dt className="text-sm text-slate-500">Edad</dt><dd className="mt-1 font-medium">{user.age} años</dd></div>
           <div><dt className="text-sm text-slate-500">Teléfono</dt><dd className="mt-1 font-medium">{user.phone}</dd></div>
+          <div><dt className="text-sm text-slate-500">Rol</dt><dd className="mt-1 font-medium">{user.role}</dd></div>
+          <div><dt className="text-sm text-slate-500">Presupuesto máx.</dt><dd className="mt-1 font-medium">{user.budgetMax ? "$" + Number(user.budgetMax).toLocaleString() : "—"}</dd></div>
+          <div><dt className="text-sm text-slate-500">Fuma</dt><dd className="mt-1 font-medium">{user.smoker ? "Sí" : "No"}</dd></div>
+          <div><dt className="text-sm text-slate-500">Mascotas</dt><dd className="mt-1 font-medium">{user.pets ? "Sí" : "No"}</dd></div>
+          <div className="sm:col-span-2 lg:col-span-4"><dt className="text-sm text-slate-500">Bio</dt><dd className="mt-1">{user.bio || "Sin bio"}</dd></div>
         </dl>
       </EntityCard>
     </EntityDetailLayout>
