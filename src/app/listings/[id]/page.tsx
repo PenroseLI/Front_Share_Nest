@@ -1,38 +1,61 @@
 "use client";
 
+import Link from "next/link";
 import { use } from "react";
-import { productsService } from "@/modules/products/services/productsService";
+import { listingsService } from "@/modules/listings/services/listingsService";
 import { useEntityDetail } from "@/hooks/useEntityDetail";
 import { EmptyState, ErrorState, LoadingState } from "@/components/ui/AsyncState";
 import { EntityCard } from "@/components/ui/EntityCard";
 import { EntityDetailLayout } from "@/components/ui/EntityDetailLayout";
+import { ListingEditForm } from "@/components/listings/ListingEditForm";
+import type { UpdateListingDto } from "@/types/api";
 
-export default function ProductDetailPage({ params }: { params: Promise<{ id: string }> }) {
+export default function ListingDetailPage({ params }: { params: Promise<{ id: string }> }) {
   // Next entrega los segmentos dinámicos como una promesa; use(params) obtiene el id de la URL.
   const { id } = use(params);
-  // El mismo hook se puede reutilizar en cualquier detalle que disponga de getById.
-  const { entity: product, loading, error } = useEntityDetail(id, productsService.getById);
+  const { entity: listing, loading, error, reload } = useEntityDetail(id, listingsService.getById);
 
-  if (loading) return <LoadingState label="Cargando producto..." />;
+  async function save(data: UpdateListingDto) {
+    try {
+      await listingsService.update(id, data);
+      await reload();
+    } catch (e: unknown) {
+      alert(e instanceof Error ? e.message : String(e));
+    }
+  }
+
+  if (loading) return <LoadingState label="Cargando habitación..." />;
   if (error) return <ErrorState message={error} />;
-  if (!product) return <EmptyState>Producto no encontrado</EmptyState>;
+  if (!listing) return <EmptyState>Habitación no encontrada</EmptyState>;
 
   return (
-    <EntityDetailLayout accent="emerald" backHref="/products" backLabel="productos" title={product.name} description="Detalle del producto consultado por su ID en la ruta dinámica.">
-      <EntityCard accent="emerald">
-        <div className="grid gap-5 md:grid-cols-3">
-          <div className="md:col-span-2">
-            <p className="text-sm text-slate-500">Descripción</p>
-            <p className="mt-1 text-slate-800">{product.description || "Sin descripción"}</p>
-            <p className="mt-5 text-xs font-mono text-slate-400 break-all">ID: {product.id}</p>
+    <EntityDetailLayout accent="emerald" backHref="/listings" backLabel="habitaciones" title={listing.title} description={<>{listing.city} • {listing.address}</>}>
+      <div className="space-y-4">
+        <EntityCard accent="emerald">
+          <div className="grid gap-5 md:grid-cols-3">
+            <div className="md:col-span-2">
+              <p className="text-sm text-slate-500">Descripción</p>
+              <p className="mt-1 text-slate-800">{listing.description || "Sin descripción"}</p>
+              <p className="mt-4 text-sm text-slate-500">Anfitrión</p>
+              <Link href={`/users/${listing.hostId}`} className="font-semibold hover:text-emerald-700">{listing.hostId}</Link>
+              <div className="mt-3 flex flex-wrap gap-1">
+                {listing.amenities?.map(a => <span key={a} className="text-xs px-2 py-0.5 rounded-full bg-slate-50 border text-slate-600">{a}</span>)}
+              </div>
+              <p className="mt-5 text-xs font-mono text-slate-400 break-all">ID: {listing.id}</p>
+            </div>
+            <div className="rounded-2xl bg-emerald-50 border border-emerald-100 p-4">
+              <p className="text-sm text-emerald-800">Precio por mes</p>
+              <p className="mt-1 text-3xl font-bold">${Number(listing.pricePerMonth).toLocaleString()}</p>
+              <p className="mt-4 text-sm text-emerald-800">Estado: <b>{listing.status}</b></p>
+              <p className="text-sm text-emerald-800">Compañeros máx.: <b>{listing.maxRoommates}</b></p>
+            </div>
           </div>
-          <div className="rounded-2xl bg-emerald-50 border border-emerald-100 p-4">
-            <p className="text-sm text-emerald-800">Precio</p>
-            <p className="mt-1 text-3xl font-bold">${Number(product.price).toFixed(2)}</p>
-            <p className="mt-4 text-sm text-emerald-800">Stock disponible: <b>{product.stock}</b></p>
-          </div>
-        </div>
-      </EntityCard>
+        </EntityCard>
+        <EntityCard accent="slate">
+          <h2 className="font-semibold mb-3">Editar</h2>
+          <ListingEditForm listing={listing} onSave={save} />
+        </EntityCard>
+      </div>
     </EntityDetailLayout>
   );
 }
