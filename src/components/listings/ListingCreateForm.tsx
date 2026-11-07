@@ -15,7 +15,7 @@ export type ListingFormValues = {
 
 export const emptyListingForm: ListingFormValues = {
   hostId: "", title: "", description: "", city: "", address: "",
-  pricePerMonth: "", maxRoommates: "1", amenities: "", status: "ACTIVE",
+  pricePerMonth: "", maxRoommates: "", amenities: "", status: "ACTIVE",
 };
 
 // Los anfitriones llegan por props: solo pueden publicar usuarios HOST o BOTH.
